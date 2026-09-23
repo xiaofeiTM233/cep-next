@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# cep-next | 终末地规划器（重构版）
 
-## Getting Started
+《明日方舟：终末地》基质规划与精锻规划工具，纯前端应用，所有数据本地保存，即开即用。
 
-First, run the development server:
+> **本项目重构自 [cmyyx/cep](https://github.com/cmyyx/cep)**，在其基础上重新设计交互与界面，并以 Next.js App Router 全量重写核心逻辑。
+
+- 🧬 **基质规划**：多武器基质刷取优化，按副本与词条锁定自动生成方案，支持地区优先级、持有标记与自定义武器
+- ⚙️ **精锻规划**：按套组浏览 5 星装备三槽位属性，逐槽位推荐属性更优（或持平）的同类型候选装备
+- 🏭 **装备工艺（原件）**：解析 wiki 配方生成工艺链，全局原件切换器联动所有装备卡材料展示
+- 🔍 **多选筛选**：类型 / 基础 / 附加 / 技能属性、副属性与特殊属性多选组合过滤
+- 💾 **纯本地运行**：选中状态与筛选条件经 zustand persist 保存在浏览器，不依赖任何后端
+
+## 功能
+
+### 基质规划（/essence-planner）
+
+多武器基质刷取优化：
+
+- **武器选择**：搜索、多选属性筛选（类型 / 基础 / 附加 / 技能属性）、卡片点选，支持固定卡宽三档切换
+- **副本方案**：按副本与词条锁定（S2 / S3）自动生成刷取方案，聚合同方案武器并给出 S1 属性候选
+- **辅助标记**：地区优先级筛选、武器 / 基质拥有标记、自定义武器管理、已选清单抽屉
+
+### 精锻规划（/refinement-planner）
+
+装备精锻方案计算：
+
+- **装备列表**：按套组分组浏览 5 星装备三槽位属性，支持搜索与副属性 / 特殊属性多选筛选
+- **装备卡片**：大图标 + 名称 + 当前工艺下的制造材料，悬浮查看逐槽位属性及与已选装备的对比
+- **三槽位推荐**：为选定装备的每个槽位找出属性更优（或持平）的同类型候选装备，可折叠面板默认展开
+
+### 装备制造工艺（原件）系统
+
+- 解析 wiki 配方数据生成各装备的工艺链（默认工艺 + 兼容原件），结果按装备缓存
+- 全局工艺切换器联动所有装备卡的材料展示，装备不支持所选原件时自动回退默认工艺
+
+## 技术栈
+
+- [Next.js](https://nextjs.org/)（App Router）+ React 19 + TypeScript
+- [Ant Design 6](https://ant.design/) 组件库 + Tailwind CSS 4
+- [zustand](https://github.com/pmndrs/zustand) 状态管理（`persist` 中间件持久化到 localStorage）
+
+## 开发
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install   # 安装依赖
+npm run dev   # 本地开发（默认 http://localhost:3000）
+npm run build # 生产构建
+npm run start # 运行生产构建
+npm run lint  # ESLint 检查
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 目录结构
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+app/                    # 页面（首页、基质规划、精锻规划）
+components/
+  essence/              # 基质规划组件（武器网格、方案列表、设置抽屉等）
+  refinement/           # 精锻规划组件（装备列表、装备卡、推荐面板等）
+data/                   # 静态数据（武器、装备、副本、属性文案、配方预览）
+lib/
+  planner/              # 基质方案求解器
+  refinement/           # 精锻推荐求解器
+  equip-recipes.ts      # 装备制造工艺链解析（带缓存）
+stores/                 # zustand 会话状态（选择、筛选、工艺等）
+public/images/          # 武器 / 装备 / 物品图标资源
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📚 说明
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+本 README 文档由 AI 辅助生成。如有问题，请提交 Issue 或[与我联系](https://github.com/xiaofeiTM233)！
