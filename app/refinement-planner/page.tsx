@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { Button, Flex, FloatButton, Layout, Segmented, Splitter, Tooltip } from 'antd'
-import { HomeOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
+import { AppSider, MobileNav } from '@/components/app-nav'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { EquipList } from '@/components/refinement/equip-list'
 import { RefinementPanel } from '@/components/refinement/refinement-panel'
@@ -80,69 +80,71 @@ export default function RefinementPlannerPage() {
   const hasSelection = selectedEquipId !== null
 
   return (
-    <Layout className="h-dvh">
-      <Layout.Header className="!flex !h-12 !items-center !bg-[var(--background)] !border-b !border-black/10 !px-3 dark:!border-white/10">
-        <span className="text-base font-semibold">精锻规划</span>
-        {hasSelection && (
-          <span className="ml-2 text-xs text-black/45 dark:text-white/45">已选择装备</span>
-        )}
-        <div className="flex-1" />
-        <ThemeToggle />
-        <Tooltip title="返回首页">
-          <Link href="/" aria-label="返回首页">
-            <Button type="text" icon={<HomeOutlined />} />
-          </Link>
-        </Tooltip>
-      </Layout.Header>
+    <Layout hasSider className="h-dvh !flex-row">
+      <AppSider />
 
-      {/* 桌面：Splitter 可拖拽分栏（位置持久化，左栏可折叠） */}
-      <div className="hidden min-h-0 flex-1 md:block">
-        <Splitter className="h-full" onResize={onResize} onResizeEnd={onResizeEnd}>
-          <Splitter.Panel
-            size={size}
-            min="25%"
-            max="58%"
-            collapsible
-            className="relative !overflow-hidden"
-          >
-            <div ref={setScrollEl} className="h-full overflow-y-auto p-3">
-              <EquipList />
+      <Layout className="!flex-col !min-h-0 !flex-1">
+        <Layout.Header className="flex items-center">
+          <MobileNav />
+          <span className="text-base font-semibold">精锻规划</span>
+          {hasSelection && (
+            <span className="ml-2 text-xs text-black/45 dark:text-white/45">已选择装备</span>
+          )}
+          <div className="flex-1" />
+          <ThemeToggle />
+        </Layout.Header>
+
+        <Layout className="!flex-col !min-h-0 !flex-1">
+          {/* 桌面：Splitter 可拖拽分栏（位置持久化，左栏可折叠） */}
+          <div className="hidden min-h-0 flex-1 md:block">
+            <Splitter className="h-full" onResize={onResize} onResizeEnd={onResizeEnd}>
+              <Splitter.Panel
+                size={size}
+                min="25%"
+                max="58%"
+                collapsible
+                className="relative !overflow-hidden"
+              >
+                <div ref={setScrollEl} className="h-full overflow-y-auto p-3">
+                  <EquipList />
+                </div>
+                {/* 套组目录：快速跳转，滚动时高亮当前套组 */}
+                <SetToc container={scrollEl} groupNames={groups.map((g) => g.setName)} />
+              </Splitter.Panel>
+              <Splitter.Panel className="!overflow-y-auto !p-4">
+                <RefinementPanel />
+              </Splitter.Panel>
+            </Splitter>
+          </div>
+
+          {/* 移动端 */}
+          <div className="flex min-h-0 flex-1 flex-col md:hidden">
+            <div className="px-4 pb-2 pt-3">
+              <Segmented
+                block
+                value={mobileView}
+                onChange={(v) => setMobileView(v as 'equips' | 'recommend')}
+                options={[
+                  { value: 'equips', label: '装备列表' },
+                  { value: 'recommend', label: '精锻推荐', disabled: !hasSelection },
+                ]}
+              />
             </div>
-            {/* 套组目录：快速跳转，滚动时高亮当前套组 */}
-            <SetToc container={scrollEl} groupNames={groups.map((g) => g.setName)} />
-          </Splitter.Panel>
-          <Splitter.Panel className="!overflow-y-auto !p-4">
-            <RefinementPanel />
-          </Splitter.Panel>
-        </Splitter>
-      </div>
-
-      {/* 移动端 */}
-      <div className="flex min-h-0 flex-1 flex-col md:hidden">
-        <div className="px-4 pb-2 pt-3">
-          <Segmented
-            block
-            value={mobileView}
-            onChange={(v) => setMobileView(v as 'equips' | 'recommend')}
-            options={[
-              { value: 'equips', label: '装备列表' },
-              { value: 'recommend', label: '精锻推荐', disabled: !hasSelection },
-            ]}
-          />
-        </div>
-        <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-16">
-          {mobileView === 'equips' ? <EquipList /> : <RefinementPanel />}
-        </div>
-        <FloatButton
-          type="primary"
-          tooltip={mobileView === 'equips' ? '查看推荐' : '管理装备'}
-          icon={mobileView === 'equips' ? <RightOutlined /> : <LeftOutlined />}
-          onClick={() =>
-            setMobileView(mobileView === 'equips' ? 'recommend' : 'equips')
-          }
-          className="!bottom-8 !right-6"
-        />
-      </div>
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-16">
+              {mobileView === 'equips' ? <EquipList /> : <RefinementPanel />}
+            </div>
+            <FloatButton
+              type="primary"
+              tooltip={mobileView === 'equips' ? '查看推荐' : '管理装备'}
+              icon={mobileView === 'equips' ? <RightOutlined /> : <LeftOutlined />}
+              onClick={() =>
+                setMobileView(mobileView === 'equips' ? 'recommend' : 'equips')
+              }
+              className="!bottom-8 !right-6"
+            />
+          </div>
+        </Layout>
+      </Layout>
     </Layout>
   )
 }

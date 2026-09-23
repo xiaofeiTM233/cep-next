@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Card, Typography } from 'antd'
+import { Card, Layout, Typography } from 'antd'
 import {
   AimOutlined,
   MoonFilled,
@@ -9,6 +9,7 @@ import {
   SunFilled,
   ThunderboltFilled,
 } from '@ant-design/icons'
+import { AppSider, MobileNav } from '@/components/app-nav'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useTheme } from '@/lib/theme'
 
@@ -33,54 +34,63 @@ const FEATURES = [
 
 export default function Home() {
   return (
-    <div className="flex min-h-dvh flex-col">
-      <header className="flex h-12 items-center border-b border-black/10 px-4 dark:border-white/10">
-        <span className="text-base font-semibold tracking-tight">终末地规划器</span>
-        <div className="flex-1" />
-        <ThemeToggle />
-      </header>
+    <Layout hasSider className="h-dvh !flex-row">
+      <AppSider />
 
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-4 py-10">
-        <div className="text-center">
-          <Typography.Title level={2} className="!mb-2">
-            《明日方舟：终末地》规划工具集
-          </Typography.Title>
-          <Typography.Paragraph type="secondary">
-            基质规划与计算、精锻规划与计算——数据本地保存，即开即用。
-          </Typography.Paragraph>
-        </div>
+      <Layout className="!flex-col !min-h-0 !flex-1">
+        <Layout.Header className="flex items-center">
+          <MobileNav />
+          <span className="text-base font-semibold tracking-tight">首页</span>
+          <div className="flex-1" />
+          <ThemeToggle />
+        </Layout.Header>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          {FEATURES.map((feature) => (
-            <Link key={feature.href} href={feature.href} className="group block">
-              <Card
-                hoverable
-                className="h-full transition-shadow group-hover:shadow-lg"
-                styles={{ body: { display: 'flex', flexDirection: 'column', gap: 8, height: '100%' } }}
-              >
-                <div className="flex items-center gap-3">
-                  <span
-                    className="flex h-10 w-10 items-center justify-center rounded-lg text-lg text-white"
-                    style={{ backgroundColor: feature.accent }}
+        <Layout.Content className="!flex-1 overflow-y-auto">
+          <main className="mx-auto flex min-h-full w-full max-w-3xl flex-col justify-center px-4 py-10">
+            <div className="text-center">
+              <Typography.Title level={2} className="!mb-2">
+                《明日方舟：终末地》规划工具集
+              </Typography.Title>
+              <Typography.Paragraph type="secondary">
+                基质规划与计算、精锻规划与计算——数据本地保存，即开即用。
+              </Typography.Paragraph>
+            </div>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {FEATURES.map((feature) => (
+                <Link key={feature.href} href={feature.href} className="group block">
+                  <Card
+                    hoverable
+                    className="h-full transition-shadow group-hover:shadow-lg"
+                    styles={{
+                      body: { display: 'flex', flexDirection: 'column', gap: 8, height: '100%' },
+                    }}
                   >
-                    {feature.icon}
-                  </span>
-                  <span className="text-base font-semibold">{feature.title}</span>
-                  <RightOutlined className="ml-auto text-xs text-black/30 transition-transform group-hover:translate-x-0.5 dark:text-white/30" />
-                </div>
-                <Typography.Paragraph type="secondary" className="!mb-0 text-sm">
-                  {feature.description}
-                </Typography.Paragraph>
-              </Card>
-            </Link>
-          ))}
-        </div>
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-lg text-white"
+                        style={{ backgroundColor: feature.accent }}
+                      >
+                        {feature.icon}
+                      </span>
+                      <span className="text-base font-semibold">{feature.title}</span>
+                      <RightOutlined className="ml-auto text-xs text-black/30 transition-transform group-hover:translate-x-0.5 dark:text-white/30" />
+                    </div>
+                    <Typography.Paragraph type="secondary" className="!mb-0 text-sm">
+                      {feature.description}
+                    </Typography.Paragraph>
+                  </Card>
+                </Link>
+              ))}
+            </div>
 
-        <div className="mt-8 text-center text-xs text-black/35 dark:text-white/35">
-          <ThemeHint />
-        </div>
-      </main>
-    </div>
+            <div className="mt-8 text-center text-xs text-black/35 dark:text-white/35">
+              <ThemeHint />
+            </div>
+          </main>
+        </Layout.Content>
+      </Layout>
+    </Layout>
   )
 }
 

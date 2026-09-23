@@ -1,15 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { Button, FloatButton, Layout, Segmented, Splitter, Tooltip } from 'antd'
 import {
-  HomeOutlined,
   LeftOutlined,
   PlusOutlined,
   RightOutlined,
   SettingOutlined,
 } from '@ant-design/icons'
+import { AppSider, MobileNav } from '@/components/app-nav'
 import { WeaponGrid } from '@/components/essence/weapon-grid'
 import { PlanList } from '@/components/essence/plan-list'
 import { EssenceSettingsDrawer } from '@/components/essence/essence-settings-drawer'
@@ -38,43 +37,45 @@ export default function EssencePlannerPage() {
   const noWeaponsSelected = selectedCount === 0
 
   return (
-    <Layout className="h-dvh">
-      <Layout.Header className="!flex !h-12 !items-center !bg-[var(--background)] !border-b !border-black/10 !px-3 dark:!border-white/10">
-        <span className="text-base font-semibold">基质规划</span>
-        <div className="flex-1" />
-        <Tooltip title="自定义武器">
-          <Button
-            type="text"
-            icon={<PlusOutlined />}
-            aria-label="自定义武器"
-            onClick={() => setCustomOpen(true)}
-          />
-        </Tooltip>
-        <Tooltip title="基质规划设置">
-          <Button
-            type="text"
-            icon={<SettingOutlined />}
-            aria-label="基质规划设置"
-            onClick={() => setSettingsOpen(true)}
-          />
-        </Tooltip>
-        <ThemeToggle />
-        <Tooltip title="返回首页">
-          <Link href="/" aria-label="返回首页">
-            <Button type="text" icon={<HomeOutlined />} />
-          </Link>
-        </Tooltip>
-      </Layout.Header>
+    <Layout hasSider className="h-dvh !flex-row">
+      <AppSider />
 
-      {/* 桌面：Splitter 可拖拽分栏（左栏可折叠） */}
-      <SplitterPane />
-      {/* 移动端：Segmented 切换 + FloatButton 跳转 */}
-      <MobilePane
-        mobileView={mobileView}
-        setMobileView={setMobileView}
-        noWeaponsSelected={noWeaponsSelected}
-        selectedCount={selectedCount}
-      />
+      <Layout className="!flex-col !min-h-0 !flex-1">
+        <Layout.Header className="flex items-center">
+          <MobileNav />
+          <span className="text-base font-semibold">基质规划</span>
+          <div className="flex-1" />
+          <Tooltip title="自定义武器">
+            <Button
+              type="text"
+              icon={<PlusOutlined />}
+              aria-label="自定义武器"
+              onClick={() => setCustomOpen(true)}
+            />
+          </Tooltip>
+          <Tooltip title="基质规划设置">
+            <Button
+              type="text"
+              icon={<SettingOutlined />}
+              aria-label="基质规划设置"
+              onClick={() => setSettingsOpen(true)}
+            />
+          </Tooltip>
+          <ThemeToggle />
+        </Layout.Header>
+
+        <Layout className="!flex-col !min-h-0 !flex-1">
+          {/* 桌面：Splitter 可拖拽分栏（左栏可折叠） */}
+          <SplitterPane />
+          {/* 移动端：Segmented 切换 + FloatButton 跳转 */}
+          <MobilePane
+            mobileView={mobileView}
+            setMobileView={setMobileView}
+            noWeaponsSelected={noWeaponsSelected}
+            selectedCount={selectedCount}
+          />
+        </Layout>
+      </Layout>
 
       <EssenceSettingsDrawer open={settingsOpen} onClose={() => setSettingsOpen(false)} />
       <CustomWeaponModal open={customOpen} onClose={() => setCustomOpen(false)} />
