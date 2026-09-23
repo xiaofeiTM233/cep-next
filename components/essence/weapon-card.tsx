@@ -2,13 +2,15 @@
 
 import { memo } from 'react'
 import Image from 'next/image'
-import { Card, Checkbox, Flex, Tag, Tooltip, Typography } from 'antd'
+import { CheckCircleFilled } from '@ant-design/icons'
+import { Flex, Tooltip } from 'antd'
 import type { Weapon } from '@/types/matrix'
 import { weaponStatLabel } from '@/data/stat-labels'
 import { RARITY_COLORS, weaponImageSrc } from '@/lib/essence-utils'
 import { useEssenceSettingsStore } from '@/stores/useEssenceSettingsStore'
 import { useMatrixStore } from '@/stores/useMatrixStore'
 import { CheckPill } from '@/components/check-pill'
+import { ItemFrameBackground } from '@/components/shared/item-frame-background'
 
 interface WeaponCardProps {
   weapon: Weapon
@@ -24,8 +26,9 @@ const STAT_ROWS = [
 ] as const
 
 /**
- * 武器卡片：稀有度边框（未选中）/ 稀有度背景（选中）+ Checkbox + 三词条。
- * 右下角"武/基"标记武器、基质拥有状态。
+ * 武器卡片：参考游戏图鉴布局——正方形暗底卡片，立绘铺满整卡，
+ * 武器名叠加在底部渐变遮罩上，三词条收进悬停 Tooltip。
+ * 选中时稀有度色描边发光 + 右上角橙色圆形对勾；左上角"武/基"拥有标记。
  * memo：点选时只有 isSelected 变化的卡片重渲染。
  */
 export const WeaponCard = memo(function WeaponCard({
@@ -44,72 +47,55 @@ export const WeaponCard = memo(function WeaponCard({
   const imageSrc = weaponImageSrc(weapon.id, weapon.iconId)
   const rarityColor = RARITY_COLORS[weapon.rarity]
 
+  const statTooltip = (
+    <div>
+      <div>{weapon.type}</div>
+      {STAT_ROWS.map(({ label, pick }) => (
+        <div key={label}>{`${label}：${weaponStatLabel(pick(weapon))}`}</div>
+      ))}
+    </div>
+  )
+
   return (
-    <Card
-      size="small"
-      hoverable
-      onClick={handleToggle}
-      style={{
-        borderColor: rarityColor,
-        ...(isSelected ? { backgroundColor: `${rarityColor}26` } : {}),
-      }}
-      className="relative"
-    >
-      <Checkbox
-        checked={isSelected}
-        onClick={(e) => e.stopPropagation()}
-        onChange={() => handleToggle()}
-        className="!absolute left-2 top-2 z-10"
+    <Tooltip title={statTooltip}>
+      <div
+        role="button"
+        tabIndex={0}
+        aria-pressed={isSelected}
         aria-label={`选择 ${weapon.name}`}
-      />
-      <Tag
-        color={rarityColor}
-        className="!absolute right-2 top-2 z-10 !m-0 !border-none !px-1 !text-[10px] !leading-4 !text-white"
+        onClick={handleToggle}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            handleToggle()
+          }
+        }}
+        className={`relative isolate aspect-square cursor-pointer overflow-hidden rounded-lg border border-black/10 outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-black/20 dark:border-white/10 dark:focus-visible:ring-white/40 ${
+          isSelected ? 'weapon-card-selected' : ''
+        }`}
+        style={
+          isSelected
+            ? { borderColor: rarityColor, boxShadow: `0 0 10px ${rarityColor}66, inset 0 0 6px ${rarityColor}33` }
+            : undefined
+        }
       >
-        {weapon.rarity}★
-      </Tag>
+        <ItemFrameBackground />
 
-      <Flex vertical align="center" gap={4}>
-        <div className="relative aspect-square w-full">
-          {imageSrc ? (
-            <Image
-              src={imageSrc}
-              alt={weapon.name}
-              fill
-              sizes="120px"
-              className="object-contain"
-            />
-          ) : (
-            <Flex
-              align="center"
-              justify="center"
-              className="h-full w-full rounded bg-black/5 text-2xl text-black/30 dark:bg-white/10 dark:text-white/30"
-            >
-              {weapon.name.slice(0, 1)}
-            </Flex>
-          )}
-        </div>
+        {/* 选中角标 */}
+        {isSelected && (
+          <CheckCircleFilled
+            className="!absolute right-1.5 top-1.5 z-20 text-[18px]"
+            style={{ color: '#faad14' }}
+          />
+        )}
 
-        <Typography.Text ellipsis className="!text-xs !font-medium" title={weapon.name}>
-          {weapon.name}
-        </Typography.Text>
-        <Tag className="!m-0 !px-1.5 !text-[10px] !leading-4">{weapon.type}</Tag>
-
-        <Flex vertical align="center" gap={0} className="w-full">
-          {STAT_ROWS.map(({ label, pick }) => (
-            <Tooltip key={label} title={`${label}：${weaponStatLabel(pick(weapon))}`}>
-              <Typography.Text
-                type="secondary"
-                ellipsis
-                className="!text-[10px] !leading-4 max-w-full"
-              >
-                {weaponStatLabel(pick(weapon))}
-              </Typography.Text>
-            </Tooltip>
-          ))}
-        </Flex>
-
-        <Flex gap={4} onClick={(e) => e.stopPropagation()} aria-label="拥有标记">
+        {/* 武/基拥有标记 */}
+        <Flex
+          gap={2}
+          className="!absolute left-1.5 top-1.5 z-10"
+          onClick={(e) => e.stopPropagation()}
+          aria-label="拥有标记"
+        >
           <Tooltip title={weaponOwned ? '已拥有武器（点击取消）' : '标记拥有武器'}>
             <CheckPill
               small
@@ -129,7 +115,39 @@ export const WeaponCard = memo(function WeaponCard({
             </CheckPill>
           </Tooltip>
         </Flex>
-      </Flex>
-    </Card>
+
+        {/* 武器立绘：铺满整卡 */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          {imageSrc ? (
+            <Image
+              src={imageSrc}
+              alt={weapon.name}
+              fill
+              sizes="160px"
+              className="object-cover"
+            />
+          ) : (
+            <span className="select-none text-2xl font-bold text-white/50">{weapon.name.slice(0, 1)}</span>
+          )}
+        </div>
+
+        {/* 稀有度底带 */}
+        <Image
+          src={`/images/item-band-${weapon.rarity}.png`}
+          alt=""
+          width={200}
+          height={40}
+          className="pointer-events-none absolute -inset-x-px bottom-0 z-20 h-auto w-[calc(100%+2px)] max-w-none object-cover object-bottom"
+          unoptimized
+        />
+
+        {/* 底部武器名（样式抄自原项目） */}
+        <div className="absolute bottom-1.5 left-0 right-0 z-30 px-2 text-center">
+          <p className="truncate text-sm font-semibold leading-tight text-stone-100 drop-shadow-md" title={weapon.name}>
+            {weapon.name}
+          </p>
+        </div>
+      </div>
+    </Tooltip>
   )
 })

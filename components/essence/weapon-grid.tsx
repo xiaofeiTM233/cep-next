@@ -101,7 +101,7 @@ export const WeaponGrid = memo(function WeaponGrid() {
   return (
     <Flex vertical gap={12}>
       {/* 常驻工具条：搜索 + 快捷操作 */}
-      <Flex gap={8} className="sticky top-0 z-10 bg-[var(--background)] pb-1">
+      <Flex gap={8} className="sticky top-0 z-10 pb-1">
         <Input
           allowClear
           value={searchQuery}

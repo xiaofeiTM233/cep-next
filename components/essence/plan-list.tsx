@@ -1,13 +1,14 @@
 'use client'
 
 import { memo, useCallback, useMemo, useState } from 'react'
-import { Alert, Button, Collapse, Empty, Flex, Image as AntImage, Spin, Table, Tag, Tooltip, Typography } from 'antd'
+import { Alert, Button, Collapse, Empty, Flex, Image as AntImage, Spin, Table, Tag, Tooltip } from 'antd'
 import { DownOutlined, UpOutlined } from '@ant-design/icons'
 import type { TableColumnsType } from 'antd'
 import { useShallow } from 'zustand/react/shallow'
 import { useMatrixStore, getPlanKey } from '@/stores/useMatrixStore'
 import { useEssenceSettingsStore } from '@/stores/useEssenceSettingsStore'
 import { CheckPill } from '@/components/check-pill'
+import { PlanWeaponCard } from '@/components/essence/plan-weapon-card'
 import { dungeons, getRegion, getRegions, getSubRegion, getSubRegions } from '@/data/dungeons'
 import { weapons as staticWeapons } from '@/data/weapons'
 import { RARITY_COLORS, isWeaponVisibleInPlans, weaponImageSrc } from '@/lib/essence-utils'
@@ -374,16 +375,16 @@ function PlanContent({
           </Tooltip>
         ))}
         {needsS1Choice && (
-          <span className="text-[10px] text-black/35 dark:text-white/35">
+          <span className="text-xs text-black/45 dark:text-white/45">
             可覆盖 {visibleCandidates.length} 种，{S1_HINT}
           </span>
         )}
       </Flex>
 
-      {/* 缩略图：已选在前；生效 S1 之外降透明度；名称随图 */}
+      {/* 武器卡片：已选在前由排序保证；生效 S1 之外降透明度 */}
       <Flex wrap gap={6} align="flex-start">
         {plan.matchedWeapons.map(({ weapon, isSelected }) => (
-          <PlanWeaponThumb
+          <PlanWeaponCard
             key={weapon.id}
             weapon={weapon}
             isSelected={isSelected}
@@ -552,62 +553,5 @@ function WeaponThumbImage({ weapon, size }: { weapon: Weapon; size: number }) {
       className="shrink-0 [&.ant-image img]:object-contain"
       style={{ objectFit: 'contain' }}
     />
-  )
-}
-
-function PlanWeaponThumb({
-  weapon,
-  isSelected,
-  inRange,
-}: {
-  weapon: Weapon
-  isSelected: boolean
-  inRange: boolean
-}) {
-  const toggleWeapon = useMatrixStore((s) => s.toggleWeapon)
-
-  return (
-    <Tooltip
-      title={
-        <div className="text-xs">
-          <div className="font-medium">
-            {weapon.name}
-            <span className="ml-1 font-normal opacity-60">{weapon.type}</span>
-          </div>
-          <div>基础：{weaponStatLabel(weapon.primaryStat)}</div>
-          <div>附加：{weaponStatLabel(weapon.elementalDamage)}</div>
-          <div>技能：{weaponStatLabel(weapon.specialAbility)}</div>
-        </div>
-      }
-    >
-      <Flex
-        vertical
-        align="center"
-        gap={2}
-        className="w-16 shrink-0 cursor-pointer"
-        onClick={() => toggleWeapon(weapon.id)}
-        role="checkbox"
-        aria-checked={isSelected}
-        aria-label={`${isSelected ? '取消选择' : '选择'}${weapon.name}`}
-      >
-        <span
-          className="relative block w-full overflow-hidden rounded-md border-2 transition-all"
-          style={{
-            borderColor: isSelected ? RARITY_COLORS[weapon.rarity] : 'transparent',
-            opacity: inRange ? 1 : 0.35,
-            backgroundColor: 'rgba(128,128,128,0.12)',
-          }}
-        >
-          <WeaponThumbImage weapon={weapon} size={56} />
-        </span>
-        <Typography.Text
-          ellipsis
-          className="w-full text-center !text-[11px] !leading-4"
-          style={{ color: isSelected ? RARITY_COLORS[weapon.rarity] : undefined }}
-        >
-          {weapon.name}
-        </Typography.Text>
-      </Flex>
-    </Tooltip>
   )
 }
