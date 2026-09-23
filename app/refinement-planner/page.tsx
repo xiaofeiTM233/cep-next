@@ -71,7 +71,7 @@ function SetToc({
 }
 
 export default function RefinementPlannerPage() {
-  const { size, onResize, onResizeEnd } = useSplitterSize('refinement', 42)
+  const { size, onResize, onResizeEnd } = useSplitterSize('refinement', 50)
   const groups = useGroupedSets()
   // 装备列表滚动容器（Anchor 的滚动目标）
   const [scrollEl, setScrollEl] = useState<HTMLDivElement | null>(null)

@@ -105,16 +105,29 @@ export const EquipCard = memo(function EquipCard({ equip, matched }: EquipCardPr
         onClick={() => selectEquip(equip.id)}
         style={isSelected ? { borderColor: '#d48806' } : undefined}
         className="relative"
-        styles={{ body: { padding: 8 } }}
+        styles={{ body: { padding: 3 } }}
         aria-pressed={isSelected}
       >
-        <Tag
-          color={TYPE_COLORS[equip.type]}
-          className="!absolute right-0 bottom-0 !m-0 !px-1 !text-[10px] !leading-4"
-          style={{ borderRadius: 0, borderBottomRightRadius: 8 }}
-        >
-          {equip.type}
-        </Tag>
+        {/* 右下角：加成数值（仅推荐卡）叠在类型标签上方 */}
+        <Flex vertical align="flex-end" className="!absolute right-0 bottom-0">
+          {matched && (
+            <Tag
+              color="#d48806"
+              className="!m-0 !px-1 !text-[10px] !leading-4"
+              style={{ borderRadius: 0 }}
+            >
+              +{matched.attr.value}
+              {matched.attr.unit}
+            </Tag>
+          )}
+          <Tag
+            color={TYPE_COLORS[equip.type]}
+            className="!m-0 !px-1 !text-[10px] !leading-4"
+            style={{ borderRadius: 0, borderBottomRightRadius: 8 }}
+          >
+            {equip.type}
+          </Tag>
+        </Flex>
         <Flex gap={8} align="center">
           {/* 图标为主 */}
           <div

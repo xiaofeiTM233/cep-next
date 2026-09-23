@@ -66,7 +66,7 @@ export function SlotRecommendationCard({ recommendation }: { recommendation: Slo
           extra: topAttr ? (
             <Tooltip title="候选中最高属性值">
               <Typography.Text className="!font-medium text-[#d48806]">
-                最高 {equipStatLabel(topAttr.key)} +{topAttr.value}
+                Max {equipStatLabel(topAttr.key)} +{topAttr.value}
                 {topAttr.unit}
               </Typography.Text>
             </Tooltip>
