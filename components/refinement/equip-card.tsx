@@ -7,7 +7,7 @@ import type { Equip, ParsedStat } from '@/types/refinement'
 import { equipById } from '@/data/equips'
 import { equipStatLabel } from '@/data/stat-labels'
 import { useRefinementStore } from '@/stores/useRefinementStore'
-import { equipImageUrl } from '@/lib/asset-urls'
+import { equipImageUrl, useGameAssetMirror } from '@/lib/asset-urls'
 import { EquipMaterialsRow } from './equip-materials-row'
 
 interface EquipCardProps {
@@ -97,6 +97,7 @@ export const EquipCard = memo(function EquipCard({ equip, matched }: EquipCardPr
   const selectedEquipId = useRefinementStore((s) => s.selectedEquipId)
   const selectEquip = useRefinementStore((s) => s.selectEquip)
   const isSelected = selectedEquipId === equip.id
+  useGameAssetMirror()
 
   return (
     <Tooltip title={<StatTooltip equip={equip} matched={matched} />} mouseEnterDelay={0.25}>

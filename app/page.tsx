@@ -10,6 +10,7 @@ import {
   ThunderboltFilled,
 } from '@ant-design/icons'
 import { AppSider, MobileNav } from '@/components/app-nav'
+import { MirrorSwitch } from '@/components/mirror-switch'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useTheme } from '@/lib/theme'
 
@@ -42,6 +43,7 @@ export default function Home() {
           <MobileNav />
           <span className="text-base font-semibold tracking-tight">首页</span>
           <div className="flex-1" />
+          <MirrorSwitch />
           <ThemeToggle />
         </Layout.Header>
 

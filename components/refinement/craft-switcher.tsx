@@ -2,7 +2,7 @@
 
 import { Flex, Segmented } from 'antd'
 import { MATERIAL_ICON_IDS } from '@/data/material-images'
-import { itemImageUrl } from '@/lib/asset-urls'
+import { itemImageUrl, useGameAssetMirror } from '@/lib/asset-urls'
 import { useRefinementStore } from '@/stores/useRefinementStore'
 
 /** 工艺切换选项：默认工艺 + 四种装备原件 */
@@ -26,6 +26,7 @@ interface CraftSwitcherProps {
 export function CraftSwitcher({ labeled = true }: CraftSwitcherProps) {
   const craftMaterial = useRefinementStore((s) => s.craftMaterial)
   const setCraftMaterial = useRefinementStore((s) => s.setCraftMaterial)
+  useGameAssetMirror()
 
   return (
     <Flex vertical gap={4}>

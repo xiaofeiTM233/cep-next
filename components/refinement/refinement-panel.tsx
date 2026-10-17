@@ -5,6 +5,7 @@ import { Card, Descriptions, Empty, Flex, Image as AntImage, Typography } from '
 import { useRecommendations, useRefinementStore, useSelectedEquip } from '@/stores/useRefinementStore'
 import { equipStatLabel } from '@/data/stat-labels'
 import { resolveEquipCost } from '@/lib/equip-recipes'
+import { equipImageUrl, useGameAssetMirror } from '@/lib/asset-urls'
 import { MaterialIcon } from './material-icon'
 import { CraftSwitcher } from './craft-switcher'
 import { SlotRecommendationCard } from './slot-recommendation'
@@ -15,6 +16,7 @@ import { SlotRecommendationCard } from './slot-recommendation'
 export const RefinementPanel = memo(function RefinementPanel() {
   const selected = useSelectedEquip()
   const recommendations = useRecommendations()
+  useGameAssetMirror()
 
   if (!selected) {
     return <Empty description="选择一件装备查看精锻推荐" className="py-16" />

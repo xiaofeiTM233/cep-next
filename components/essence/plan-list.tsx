@@ -12,6 +12,7 @@ import { PlanWeaponCard } from '@/components/essence/plan-weapon-card'
 import { dungeons, getRegion, getRegions, getSubRegion, getSubRegions } from '@/data/dungeons'
 import { weapons as staticWeapons } from '@/data/weapons'
 import { RARITY_COLORS, isWeaponVisibleInPlans, weaponImageSrc } from '@/lib/essence-utils'
+import { useGameAssetMirror } from '@/lib/asset-urls'
 import { computeEffectiveS1 } from '@/lib/planner/s1-utils'
 import { LOCK_TYPE_LABELS, weaponStatLabel } from '@/data/stat-labels'
 import type { DungeonPlan, WeaponMatch } from '@/lib/planner/essence-solver'
@@ -530,6 +531,7 @@ function OwnershipMarks({ weaponId }: { weaponId: string }) {
 }
 
 function WeaponThumbImage({ weapon, size }: { weapon: Weapon; size: number }) {
+  useGameAssetMirror()
   const imageSrc = weaponImageSrc(weapon.id, weapon.iconId)
   if (!imageSrc) {
     return (

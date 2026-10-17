@@ -1,23 +1,40 @@
+import { ASSET_MIRRORS } from '@/lib/asset-mirrors'
+import { useMirrorStore } from '@/stores/useMirrorStore'
+
 /**
- * 游戏图标资源统一走 jsDelivr（Fastly）镜像上游仓库 cmyyx/cep，
- * 不随本仓库分发；@main 跟踪上游最新（jsDelivr 对分支引用的缓存约 12 小时）。
+ * 游戏图标资源统一走镜像 CDN，不随本仓库分发；
+ * 镜像源可实时切换（stores/useMirrorStore + components/mirror-switch.tsx），
+ * 默认 Fastly，@main 跟踪上游最新（jsDelivr 对分支引用的缓存约 12 小时）。
  *
  * 上游对应目录：https://github.com/cmyyx/cep/tree/main/public/images
  */
 
-const GAME_ASSET_BASE = 'https://fastly.jsdelivr.net/gh/cmyyx/cep@main/public/images'
+const ASSET_REPO_PATH = '/gh/cmyyx/cep@main/public/images'
+
+/** 当前镜像 base（纯函数读取，可在 React 之外调用）。 */
+function currentMirrorBase(): string {
+  return ASSET_MIRRORS[useMirrorStore.getState().mirror].base
+}
+
+/**
+ * 订阅镜像源切换：图标 URL 在组件渲染时生成，
+ * 切换镜像后必须重渲染才会拿到新地址——渲染图标的组件调用一次即可。
+ */
+export function useGameAssetMirror(): void {
+  useMirrorStore((s) => s.mirror)
+}
 
 /** 武器图标。 */
 export function weaponImageUrl(imageId: string): string {
-  return `${GAME_ASSET_BASE}/weapon/${imageId}.avif`
+  return `${currentMirrorBase()}${ASSET_REPO_PATH}/weapon/${imageId}.avif`
 }
 
 /** 装备图标。 */
 export function equipImageUrl(imageId: string): string {
-  return `${GAME_ASSET_BASE}/equip/${imageId}.avif`
+  return `${currentMirrorBase()}${ASSET_REPO_PATH}/equip/${imageId}.avif`
 }
 
 /** 物品 / 材料图标。 */
 export function itemImageUrl(iconId: string): string {
-  return `${GAME_ASSET_BASE}/items/${iconId}.avif`
+  return `${currentMirrorBase()}${ASSET_REPO_PATH}/items/${iconId}.avif`
 }

@@ -7,6 +7,7 @@ import { Flex, Tooltip } from 'antd'
 import type { Weapon } from '@/types/matrix'
 import { weaponStatLabel } from '@/data/stat-labels'
 import { RARITY_COLORS, weaponImageSrc } from '@/lib/essence-utils'
+import { useGameAssetMirror } from '@/lib/asset-urls'
 import { useEssenceSettingsStore } from '@/stores/useEssenceSettingsStore'
 import { useMatrixStore } from '@/stores/useMatrixStore'
 import { CheckPill } from '@/components/check-pill'
@@ -44,6 +45,7 @@ export const WeaponCard = memo(function WeaponCard({
   const setWeaponOwnership = useEssenceSettingsStore((s) => s.setWeaponOwnership)
   const setEssenceStatus = useEssenceSettingsStore((s) => s.setEssenceStatus)
 
+  useGameAssetMirror()
   const imageSrc = weaponImageSrc(weapon.id, weapon.iconId)
   const rarityColor = RARITY_COLORS[weapon.rarity]
 

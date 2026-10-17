@@ -13,6 +13,7 @@ import { WeaponGrid } from '@/components/essence/weapon-grid'
 import { PlanList } from '@/components/essence/plan-list'
 import { EssenceSettingsDrawer } from '@/components/essence/essence-settings-drawer'
 import { CustomWeaponModal } from '@/components/essence/custom-weapon-modal'
+import { MirrorSwitch } from '@/components/mirror-switch'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useMatrixStore } from '@/stores/useMatrixStore'
 import { useSplitterSize } from '@/lib/use-splitter-size'
@@ -61,6 +62,7 @@ export default function EssencePlannerPage() {
               onClick={() => setSettingsOpen(true)}
             />
           </Tooltip>
+          <MirrorSwitch />
           <ThemeToggle />
         </Layout.Header>
 

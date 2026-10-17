@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Button, Flex, FloatButton, Layout, Segmented, Splitter, Tooltip } from 'antd'
+import { Flex, FloatButton, Layout, Segmented, Splitter } from 'antd'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import { AppSider, MobileNav } from '@/components/app-nav'
+import { MirrorSwitch } from '@/components/mirror-switch'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { EquipList } from '@/components/refinement/equip-list'
 import { RefinementPanel } from '@/components/refinement/refinement-panel'
@@ -91,6 +92,7 @@ export default function RefinementPlannerPage() {
             <span className="ml-2 text-xs text-black/45 dark:text-white/45">已选择装备</span>
           )}
           <div className="flex-1" />
+          <MirrorSwitch />
           <ThemeToggle />
         </Layout.Header>
 

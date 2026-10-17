@@ -7,6 +7,7 @@ import { Tooltip } from 'antd'
 import type { Weapon } from '@/types/matrix'
 import { weaponStatLabel } from '@/data/stat-labels'
 import { RARITY_COLORS, weaponImageSrc } from '@/lib/essence-utils'
+import { useGameAssetMirror } from '@/lib/asset-urls'
 import { useMatrixStore } from '@/stores/useMatrixStore'
 import { ItemFrameBackground } from '@/components/shared/item-frame-background'
 
@@ -30,6 +31,7 @@ export const PlanWeaponCard = memo(function PlanWeaponCard({
 }: PlanWeaponCardProps) {
   const toggleWeapon = useMatrixStore((s) => s.toggleWeapon)
 
+  useGameAssetMirror()
   const imageSrc = weaponImageSrc(weapon.id, weapon.iconId)
   const rarityColor = RARITY_COLORS[weapon.rarity]
 
