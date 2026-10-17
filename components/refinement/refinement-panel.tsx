@@ -32,7 +32,7 @@ export const RefinementPanel = memo(function RefinementPanel() {
       <Card size="small">
         <Flex gap={16} wrap>
           <AntImage
-            src={`/images/equip/${selected.imageId}.avif`}
+            src={equipImageUrl(selected.imageId)}
             alt={selected.name}
             width={80}
             height={80}

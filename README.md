@@ -53,6 +53,8 @@ npm run lint  # ESLint 检查
 
 `data/` 下的 `weapons.ts` / `equips.ts` / `dungeons.ts` 是**构建产物，不入库**：`npm run dev` 和 `npm run build` 前会自动从上游 [cmyyx/cep](https://github.com/cmyyx/cep) 拉取最新数据（见 `scripts/sync-upstream-data.mjs`）。拉取失败会直接中止构建（无本地回退）；离线开发时可设 `SKIP_DATA_SYNC=1` 沿用本地已有文件。
 
+`public/images/` 下的武器 / 装备 / 物品图标同样不随仓库分发，运行时经 jsDelivr（Fastly）镜像上游仓库加载（见 `lib/asset-urls.ts`）；`item-frame-bg.png` 与 `item-band-*.png` 为本地 UI 素材，仍随仓库分发。
+
 ## 目录结构
 
 ```text
@@ -66,7 +68,7 @@ lib/
   refinement/           # 精锻推荐求解器
   equip-recipes.ts      # 装备制造工艺链解析（带缓存）
 stores/                 # zustand 会话状态（选择、筛选、工艺等）
-public/images/          # 本地 UI 素材（边框 / 底带）
+public/images/          # 本地 UI 素材（边框 / 底带）；游戏图标走 jsDelivr 镜像
 ```
 
 ## 📚 说明

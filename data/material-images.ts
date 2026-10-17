@@ -1,4 +1,6 @@
-/** 材料/调度券名称 → 图标 id（public/images/items/{id}.avif）。 */
+import { itemImageUrl } from '@/lib/asset-urls'
+
+/** 材料/调度券名称 → 图标 id（CDN 镜像中的物品图标）。 */
 export const MATERIAL_ICON_IDS: Readonly<Record<string, string>> = {
   息壤装备原件: 'item_equip_script_4',
   赤铜装备原件: 'item_equip_script_4_1',
@@ -8,8 +10,8 @@ export const MATERIAL_ICON_IDS: Readonly<Record<string, string>> = {
   谷地调度券: 'item_domain_tundra_coupon',
 }
 
-/** 材料图标路径；无图标的材料返回 undefined。 */
+/** 材料图标 URL（jsDelivr 镜像）；无图标的材料返回 undefined。 */
 export function materialImageSrc(name: string): string | undefined {
   const iconId = MATERIAL_ICON_IDS[name]
-  return iconId ? `/images/items/${iconId}.avif` : undefined
+  return iconId ? itemImageUrl(iconId) : undefined
 }

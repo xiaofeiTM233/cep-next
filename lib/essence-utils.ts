@@ -1,5 +1,6 @@
 import type { Weapon } from '@/types/matrix'
 import { dungeons } from '@/data/dungeons'
+import { weaponImageUrl } from '@/lib/asset-urls'
 
 /** 稀有度 → 主题色（游戏惯例：金/紫/蓝/绿）。 */
 export const RARITY_COLORS: Record<Weapon['rarity'], string> = {
@@ -9,13 +10,13 @@ export const RARITY_COLORS: Record<Weapon['rarity'], string> = {
   3: '#5ad8a6',
 }
 
-/** 武器图标路径；自定义/预览武器无图返回 undefined。 */
+/** 武器图标 URL（jsDelivr 镜像）；自定义/预览武器无图返回 undefined。 */
 export function weaponImageSrc(id: string, iconId?: string): string | undefined {
   if (id.startsWith('custom-') || id.startsWith('preview:') || id.startsWith('data:')) {
     return undefined
   }
   const imageId = iconId ?? id
-  return `/images/weapon/${imageId}.avif`
+  return weaponImageUrl(imageId)
 }
 
 /** 武器三属性候选值：由副本池静态派生。 */

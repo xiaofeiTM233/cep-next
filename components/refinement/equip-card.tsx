@@ -7,6 +7,7 @@ import type { Equip, ParsedStat } from '@/types/refinement'
 import { equipById } from '@/data/equips'
 import { equipStatLabel } from '@/data/stat-labels'
 import { useRefinementStore } from '@/stores/useRefinementStore'
+import { equipImageUrl } from '@/lib/asset-urls'
 import { EquipMaterialsRow } from './equip-materials-row'
 
 interface EquipCardProps {
@@ -135,7 +136,7 @@ export const EquipCard = memo(function EquipCard({ equip, matched }: EquipCardPr
             style={{ width: 56, height: 56 }}
           >
             <Image
-              src={`/images/equip/${equip.imageId}.avif`}
+              src={equipImageUrl(equip.imageId)}
               alt={equip.name}
               fill
               sizes="56px"

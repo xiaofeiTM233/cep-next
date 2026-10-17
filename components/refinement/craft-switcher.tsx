@@ -2,6 +2,7 @@
 
 import { Flex, Segmented } from 'antd'
 import { MATERIAL_ICON_IDS } from '@/data/material-images'
+import { itemImageUrl } from '@/lib/asset-urls'
 import { useRefinementStore } from '@/stores/useRefinementStore'
 
 /** 工艺切换选项：默认工艺 + 四种装备原件 */
@@ -41,7 +42,7 @@ export function CraftSwitcher({ labeled = true }: CraftSwitcherProps) {
               {opt.iconId && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={`/images/items/${opt.iconId}.avif`}
+                  src={itemImageUrl(opt.iconId)}
                   alt=""
                   width={18}
                   height={18}

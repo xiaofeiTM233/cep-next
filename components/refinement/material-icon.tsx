@@ -4,6 +4,7 @@ import { memo } from 'react'
 import Image from 'next/image'
 import { Flex, Tooltip } from 'antd'
 import { MATERIAL_ICON_IDS } from '@/data/material-images'
+import { itemImageUrl } from '@/lib/asset-urls'
 
 const RARITY_COLORS: Record<number, string> = {
   1: '#9aa0a6',
@@ -43,7 +44,7 @@ export const MaterialIcon = memo(function MaterialIcon({
           }}
         >
           <Image
-            src={`/images/items/${iconId}.avif`}
+            src={itemImageUrl(iconId)}
             alt={label}
             width={size}
             height={size}
