@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* dark: 变体跟随 html[data-theme]（由 lib/theme.tsx 切换），而非系统偏好 */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 :root {
   --background: #f5f5f5;
   --foreground: rgba(0, 0, 0, 0.88);
