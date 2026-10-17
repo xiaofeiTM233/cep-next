@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 游戏数据：构建/开发前从上游 cmyyx/cep 拉取（scripts/sync-upstream-data.mjs），不入库
+/data/weapons.ts
+/data/equips.ts
+/data/dungeons.ts
+
+# 游戏图标：不随仓库分发，运行时经 jsDelivr（Fastly）镜像加载（lib/asset-urls.ts）
+/public/images/weapon/
+/public/images/equip/
+/public/images/items/
