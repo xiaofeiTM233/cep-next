@@ -49,6 +49,10 @@ npm run start # 运行生产构建
 npm run lint  # ESLint 检查
 ```
 
+### 数据同步
+
+`data/` 下的 `weapons.ts` / `equips.ts` / `dungeons.ts` 是**构建产物，不入库**：`npm run dev` 和 `npm run build` 前会自动从上游 [cmyyx/cep](https://github.com/cmyyx/cep) 拉取最新数据（见 `scripts/sync-upstream-data.mjs`）。拉取失败会直接中止构建（无本地回退）；离线开发时可设 `SKIP_DATA_SYNC=1` 沿用本地已有文件。
+
 ## 目录结构
 
 ```text
@@ -62,7 +66,7 @@ lib/
   refinement/           # 精锻推荐求解器
   equip-recipes.ts      # 装备制造工艺链解析（带缓存）
 stores/                 # zustand 会话状态（选择、筛选、工艺等）
-public/images/          # 武器 / 装备 / 物品图标资源
+public/images/          # 本地 UI 素材（边框 / 底带）
 ```
 
 ## 📚 说明
