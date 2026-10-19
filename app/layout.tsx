@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { AntdProviders } from '@/lib/antd-providers'
 import { ThemeProvider } from '@/lib/theme'
+import { ServiceWorkerRegister } from '@/components/sw-register'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -33,7 +34,10 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body>
         <AntdRegistry>
           <ThemeProvider>
-            <AntdProviders>{children}</AntdProviders>
+            <AntdProviders>
+              {children}
+              <ServiceWorkerRegister />
+            </AntdProviders>
           </ThemeProvider>
         </AntdRegistry>
       </body>
